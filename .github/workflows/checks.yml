@@ -2,10 +2,11 @@ name: actions
 
 on: 
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
-  lint:
+
+  linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,9 +15,22 @@ jobs:
           python-version: 3.12
       - run: python -m pip install --upgrade pip
       - run: pip install -r backend/requirements.txt
-      - run: ruff check
-  test:
-    needs: [lint]
+      - run: ruff check backend
+
+  typing:
+    needs: [ linter ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r backend/requirements.txt
+      - run: mypy backend
+
+  tests:
+    needs: [ typing, linter ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
