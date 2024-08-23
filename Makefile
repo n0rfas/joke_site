@@ -7,3 +7,6 @@ check:
 
 tests:
 	pytest
+
+run:
+	fastapi dev backend/app/main.py
