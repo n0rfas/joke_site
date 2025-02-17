@@ -1,3 +1,6 @@
+compile:
+	uv pip compile --all-extras pyproject.toml -o requirements/dev.txt
+
 format:
 	ruff check --select I --fix .
 	ruff format .
