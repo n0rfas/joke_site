@@ -19,8 +19,6 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: pip install uv==0.7.3
       - run: uv venv && uv sync --frozen
-      - run: uv run alembic --version
-      - run: uv run pytest -V
       - run: uv run ruff check --select I .
       - run: uv run ruff check .
 
@@ -38,7 +36,7 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: pip install uv==0.7.3
       - run: uv venv && uv sync --frozen
-      - run: mypy .
+      - run: uv run mypy .
 
   tests:
     needs: [ typing, linter ]
@@ -54,4 +52,4 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: pip install uv==0.7.3
       - run: uv venv && uv sync --frozen
-      - run: pytest tests
+      - run: uv run pytest tests
