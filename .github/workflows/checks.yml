@@ -20,6 +20,8 @@ jobs:
       - run: pip install uv==0.7.3
       - run: uv venv && uv sync --frozen
       - run: source .venv/bin/activate
+      - run: alembic --version
+      - run: pytest -V
       - run: ruff check --select I .
       - run: ruff check .
 
