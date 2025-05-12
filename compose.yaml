@@ -1,0 +1,55 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    networks:
+      - internal
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASS=${DATABASE_PASS}
+      - DATABASE_NAME=${DATABASE_NAME}
+    depends_on:
+      - db
+    entrypoint: ["/bin/sh", "/app/entrypoint.sh"]
+    networks:
+      - internal
+
+  db:
+    image: postgres:17.5-alpine3.21
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASS}
+      - POSTGRES_DB=${DATABASE_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+  caddy:
+    image: caddy:2.10.0-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./infrastructure/Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - internal
+
+volumes:
+  postgres_data: 
+
+networks:
+  internal:
+    driver: bridge

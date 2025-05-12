@@ -14,7 +14,8 @@ jobs:
         with:
           python-version: 3.12
       - run: python -m pip install --upgrade pip
-      - run: pip install -r backend/requirements/dev.txt
+      - run: pip install uv==0.7.3
+      - run: uv sync --frozen
       - run: ruff check --select I --fix backend
       - run: ruff check backend
 
@@ -27,7 +28,8 @@ jobs:
         with:
           python-version: 3.12
       - run: python -m pip install --upgrade pip
-      - run: pip install -r backend/requirements/dev.txt
+      - run: pip install uv==0.7.3
+      - run: uv sync --frozen
       - run: mypy backend
 
   tests:
@@ -39,5 +41,6 @@ jobs:
         with:
           python-version: 3.12
       - run: python -m pip install --upgrade pip
-      - run: pip install -r backend/requirements/dev.txt
+      - run: pip install uv==0.7.3
+      - run: uv sync --frozen
       - run: pytest backend/tests
