@@ -9,11 +9,11 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     steps:
-      - working-directory: backend
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: 3.12
+      - working-directory: backend
       - run: python -m pip install --upgrade pip
       - run: pip install uv==0.7.3
       - run: uv venv && uv sync --frozen
@@ -24,11 +24,11 @@ jobs:
     needs: [ linter ]
     runs-on: ubuntu-latest
     steps:
-      - working-directory: backend
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: 3.12
+      - working-directory: backend
       - run: python -m pip install --upgrade pip
       - run: pip install uv==0.7.3
       - run: uv venv && uv sync --frozen
@@ -38,12 +38,12 @@ jobs:
     needs: [ typing, linter ]
     runs-on: ubuntu-latest
     steps:
-      - working-directory: backend
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: 3.12
+      - working-directory: backend
       - run: python -m pip install --upgrade pip
       - run: pip install uv==0.7.3
-      - run: uv sync --frozen
+      - run: uv venv && uv sync --frozen
       - run: pytest tests
