@@ -9,6 +9,7 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     steps:
+      - working-directory: backend
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
@@ -16,13 +17,14 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: pip install uv==0.7.3
       - run: uv venv && uv sync --frozen
-      - run: ruff check --select I --fix backend
-      - run: ruff check backend
+      - run: ruff check --select I --fix .
+      - run: ruff check .
 
   typing:
     needs: [ linter ]
     runs-on: ubuntu-latest
     steps:
+      - working-directory: backend
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
@@ -30,12 +32,13 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: pip install uv==0.7.3
       - run: uv venv && uv sync --frozen
-      - run: mypy backend
+      - run: mypy .
 
   tests:
     needs: [ typing, linter ]
     runs-on: ubuntu-latest
     steps:
+      - working-directory: backend
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
@@ -43,4 +46,4 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: pip install uv==0.7.3
       - run: uv sync --frozen
-      - run: pytest backend/tests
+      - run: pytest tests
