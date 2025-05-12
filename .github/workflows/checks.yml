@@ -8,6 +8,9 @@ jobs:
 
   linter:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -15,13 +18,11 @@ jobs:
           python-version: 3.12
       - run: python -m pip install --upgrade pip
       - run: pip install uv==0.7.3
-      - run: cd ./backend
       - run: uv venv && uv sync --frozen
-      - run: source .venv/bin/activate
-      - run: alembic --version
-      - run: pytest -V
-      - run: ruff check --select I .
-      - run: ruff check .
+      - run: uv run alembic --version
+      - run: uv run pytest -V
+      - run: uv run ruff check --select I .
+      - run: uv run ruff check .
 
   typing:
     needs: [ linter ]
